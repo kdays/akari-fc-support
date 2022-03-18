@@ -1,0 +1,9 @@
+{
+  "name": "kdays/akari-fc-support",
+  "description": "KDays Akari Framework FC Support",
+  "autoload": {
+    "psr-4": {
+      "AkariFC\\": ""
+    }
+  }
+}
