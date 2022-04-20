@@ -5,7 +5,7 @@ namespace AkariFC;
 use Akari\system\ioc\Injectable;
 use Akari\system\util\helper\AppValueTrait;
 
-class Cookie extends Injectable {
+class Cookie extends Injectable implements ICanFree {
 
     use AppValueTrait;
 
@@ -104,6 +104,11 @@ class Cookie extends Injectable {
         }
 
         return $this->set($key, FALSE, NULL, ['prefix' => $prefix]);
+    }
+
+    public function freeRes() {
+        $this->values = [];
+        $this->httpHeaders = [];
     }
 
 

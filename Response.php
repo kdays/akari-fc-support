@@ -5,7 +5,7 @@ use Akari\system\http\HttpCode;
 use Akari\system\ioc\Injectable;
 use RingCentral\Psr7\Response as FcResponse;
 
-class Response extends Injectable {
+class Response extends Injectable implements ICanFree {
 
     private $isSent = FALSE;
     private $responseCode = HttpCode::OK;
@@ -107,5 +107,10 @@ class Response extends Injectable {
 
     public function isSent() {
         return $this->isSent;
+    }
+
+    public function freeRes() {
+        $this->resetHeaders();
+        // TODO: Implement freeRes() method.
     }
 }

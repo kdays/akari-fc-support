@@ -6,7 +6,7 @@ use Akari\system\ioc\Injectable;
 use Akari\system\security\FilterFactory;
 use Akari\system\util\TextUtil;
 
-class Request extends Injectable {
+class Request extends Injectable implements ICanFree {
 
     protected static $request;
     public static function setFcRequest($request) {
@@ -85,13 +85,13 @@ class Request extends Injectable {
         return json_decode($this->getRawBody(), $assoc);
     }
 
+    protected $multiRes;
     public function getParsedRequest() {
-        static $res = NULL;
-        if ($res === NULL) {
-            $res = (new MultipartParser())->parse(self::$request);
+        if ($this->multiRes === NULL) {
+            $this->multiRes = (new MultipartParser())->parse(self::$request);
         }
 
-        return $res;
+        return $this->multiRes;
     }
 
     public function getPost($key, $filter = "default", $defaultValue = NULL, $allowArray = NULL) {
@@ -203,4 +203,17 @@ class Request extends Injectable {
         return strtolower($serverVar) == 'xmlhttprequest';
     }
 
+    protected $values = [];
+    public function setValue(string $key, $value) {
+        $this->values[$key] = $value;
+    }
+
+    public function getValue(string $key, $defaultValue = NULL) {
+        return array_key_exists($key, $this->values) ? $this->values[$key] : $defaultValue;
+    }
+
+    public function freeRes() {
+        $this->values = [];
+        $this->multiRes = NULL;
+    }
 }
