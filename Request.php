@@ -78,11 +78,22 @@ class Request extends Injectable implements ICanFree {
     }
 
     public function getRawBody() {
-        return self::$request->getBody()->getContent();
+        $body = self::$request->getBody();
+
+        if ($body) {
+            return $body->getContents();
+        }
+
+        return NULL;
     }
 
     public function getJsonRawBody($assoc = TRUE) {
-        return json_decode($this->getRawBody(), $assoc);
+        $rawBody = $this->getRawBody();
+        if (empty($rawBody)) {
+            return [];
+        }
+
+        return json_decode($rawBody, $assoc);
     }
 
     protected $multiRes;
